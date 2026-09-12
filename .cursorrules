@@ -1,0 +1,31 @@
+# Git 提交信息（Source Control 自动生成）
+
+When Cursor auto-generates a Git commit message for this repository, follow ALL rules below.
+
+## Hard requirements
+
+1. MUST use Conventional Commits: `<type>(<scope>): <subject>`
+2. MUST write the subject (and body if any) in Simplified Chinese (简体中文)
+3. NEVER write the commit subject entirely in English
+4. NEVER use vague subjects: `update`, `fix bug`, `wip`, `misc`, `临时提交`
+5. Keep ONE concise subject line (≤72 characters); do NOT end with `。` or `.`
+6. Add a short Chinese body ONLY when needed to explain motivation; no file-list dump
+7. One commit = one concern; subject should explain WHY, not list filenames
+8. Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+9. Preferred scopes for this repo: `api`, `web`, `llm`, `evidence`, `script`, `game`（无合适 scope 时可省略）
+10. Breaking change: use `type(scope)!: …` and/or a footer `BREAKING CHANGE: …` in Chinese
+
+## Examples (copy the style, not the English)
+
+- feat(script): 支持自定义剧本可视化编辑与质检
+- fix(llm): 修复流式对话中断后残留状态未清理的问题
+- refactor(evidence): 抽取证物出示逻辑以复用组合反应
+- docs: 补充本地开发环境与多 LLM 配置说明
+- chore: 同步 Docker Compose 默认端口配置
+
+## Wrong vs right
+
+- ❌ `Refactor BaseGameRoom for better performance.`
+- ✅ `refactor(api): 优化会话状态结构以降低内存占用`
+- ❌ `fix: update login bug`
+- ✅ `fix(game): 修复指认凶手后动机选项未刷新的问题`
