@@ -30,10 +30,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "PORT=5001 REACT_APP_API_URL=http://0.0.0.0:10000 react-scripts start",
-    "build": "REACT_APP_API_URL=https://ai-murder-mystery-hackathon.onrender.com react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "generate-avatars": "node scripts/generate-avatar-list.js",
     "generate-backgrounds": "node scripts/generate-background-list.js",
     "update-avatars": "./update-avatars.sh"
@@ -57,6 +59,8 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "eslint-config-react-app": "^7.0.1",
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1"

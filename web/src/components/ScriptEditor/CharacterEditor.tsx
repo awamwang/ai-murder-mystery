@@ -50,9 +50,6 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({ characters, onUpdate,
   const [backgroundSelectModalOpened, setBackgroundSelectModalOpened] = useState(false);
   const [backgroundFile, setBackgroundFile] = useState<File | null>(null);
 
-  // 可用的头像选项（从映射表获取）
-  const defaultAvatarOptions = getAllAvatarNames();
-
   // 当characters prop更新时，同步更新editingCharacter状态
   useEffect(() => {
     // 使用函数式更新来避免依赖editingCharacter
@@ -82,6 +79,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({ characters, onUpdate,
   // 获取可用的头像和背景图列表
   useEffect(() => {
     const fetchAssets = async () => {
+      const defaultAvatarOptions = getAllAvatarNames();
       try {
         // 并行加载头像和背景图
         const [avatarsResponse] = await Promise.allSettled([

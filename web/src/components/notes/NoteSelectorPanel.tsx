@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Modal, Text, Group, Stack, TextInput, ScrollArea,
   Button, Card, Badge, ActionIcon, Box, Divider
@@ -30,14 +30,7 @@ const NoteSelectorPanel: React.FC<NoteSelectorPanelProps> = ({
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [textContent, setTextContent] = useState('');
 
-  useEffect(() => {
-    if (opened) {
-      const timeoutId = setTimeout(() => { loadNotes(); }, searchQuery ? 300 : 0);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [opened, sessionId, searchQuery]);
-
-  const loadNotes = () => {
+  const loadNotes = useCallback(() => {
     try {
       const allNotes = loadNotesFromStorage(sessionId);
       let filteredNotes = allNotes;
@@ -61,7 +54,14 @@ const NoteSelectorPanel: React.FC<NoteSelectorPanelProps> = ({
     } catch (error) {
       console.error('❌ 加载笔记失败:', error);
     }
-  };
+  }, [sessionId, searchQuery, currentActor]);
+
+  useEffect(() => {
+    if (opened) {
+      const timeoutId = setTimeout(() => { loadNotes(); }, searchQuery ? 300 : 0);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [opened, sessionId, searchQuery, loadNotes]);
 
   const handleNoteSelect = (note: Note) => {
     setSelectedNote(note);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
   Text,
@@ -52,14 +52,7 @@ const EvidenceSelectorPanel: React.FC<EvidenceSelectorPanelProps> = ({
   const [selectedEvidence, setSelectedEvidence] = useState<Evidence | null>(null);
   const [textContent, setTextContent] = useState('');
 
-  useEffect(() => {
-    if (opened) {
-      const timeoutId = setTimeout(() => { loadEvidences(); }, searchQuery ? 300 : 0);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [opened, sessionId, searchQuery]);
-
-  const loadEvidences = () => {
+  const loadEvidences = useCallback(() => {
     try {
       const filteredEvidences = getFilteredEvidences(sessionId, {
         searchQuery: searchQuery.trim() || undefined
@@ -78,7 +71,14 @@ const EvidenceSelectorPanel: React.FC<EvidenceSelectorPanelProps> = ({
     } catch (error) {
       console.error('❌ 加载证物失败:', error);
     }
-  };
+  }, [sessionId, searchQuery, currentActor]);
+
+  useEffect(() => {
+    if (opened) {
+      const timeoutId = setTimeout(() => { loadEvidences(); }, searchQuery ? 300 : 0);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [opened, sessionId, searchQuery, loadEvidences]);
 
   const handleEvidenceSelect = (evidence: Evidence) => {
     setSelectedEvidence(evidence);

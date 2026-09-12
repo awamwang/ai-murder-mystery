@@ -478,55 +478,6 @@ const parsePartialDetails = (detailsText: string): Record<string, any> => {
 };
 
 /**
- * 部分解析scores对象
- */
-const parsePartialScores = (scoresText: string): ParsedQualityReport['scores'] => {
-  const scores: ParsedQualityReport['scores'] = {};
-
-  // 解析contentLogic
-  const contentLogicMatch = scoresText.match(/"contentLogic"\s*:\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/);
-  if (contentLogicMatch) {
-    try {
-      scores.contentLogic = JSON.parse(`{${contentLogicMatch[1]}}`);
-    } catch (e) {
-      // 提取score字段
-      const scoreMatch = contentLogicMatch[1].match(/"score"\s*:\s*(\d+)/);
-      if (scoreMatch) {
-        scores.contentLogic = { score: parseInt(scoreMatch[1]) };
-      }
-    }
-  }
-
-  // 解析aiExecution
-  const aiExecutionMatch = scoresText.match(/"aiExecution"\s*:\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/);
-  if (aiExecutionMatch) {
-    try {
-      scores.aiExecution = JSON.parse(`{${aiExecutionMatch[1]}}`);
-    } catch (e) {
-      const scoreMatch = aiExecutionMatch[1].match(/"score"\s*:\s*(\d+)/);
-      if (scoreMatch) {
-        scores.aiExecution = { score: parseInt(scoreMatch[1]) };
-      }
-    }
-  }
-
-  // 解析playerExperience
-  const playerExpMatch = scoresText.match(/"playerExperience"\s*:\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/);
-  if (playerExpMatch) {
-    try {
-      scores.playerExperience = JSON.parse(`{${playerExpMatch[1]}}`);
-    } catch (e) {
-      const scoreMatch = playerExpMatch[1].match(/"score"\s*:\s*(\d+)/);
-      if (scoreMatch) {
-        scores.playerExperience = { score: parseInt(scoreMatch[1]) };
-      }
-    }
-  }
-
-  return scores;
-};
-
-/**
  * 分析评估进度
  */
 export const analyzeProgress = (report: ParsedQualityReport): EvaluationProgress => {

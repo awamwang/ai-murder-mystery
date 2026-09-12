@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Modal, Button, Text, ScrollArea, Paper, Stack, Group, 
   ActionIcon, Tooltip, Badge, Divider, Alert, Loader,
@@ -69,7 +69,7 @@ const SpoilerHistoryModal: React.FC<SpoilerHistoryModalProps> = ({
   const [viewMode, setViewMode] = useState<'list' | 'detail'>('list');
 
   // 加载历史剧透故事
-  const loadStories = async () => {
+  const loadStories = useCallback(async () => {
     if (!script?.id) return;
     
     setLoading(true);
@@ -88,7 +88,7 @@ const SpoilerHistoryModal: React.FC<SpoilerHistoryModalProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [script?.id]);
 
   // 删除故事
   const deleteStory = async (storyId: number) => {
@@ -160,7 +160,7 @@ const SpoilerHistoryModal: React.FC<SpoilerHistoryModalProps> = ({
       setViewMode('list');
       setSelectedStory(null);
     }
-  }, [opened, script]);
+  }, [opened, script, loadStories]);
 
   if (!script) {
     return (

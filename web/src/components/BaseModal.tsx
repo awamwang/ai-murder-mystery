@@ -1,5 +1,5 @@
-import React from 'react';
-import { Modal, ModalProps } from '@mantine/core';
+import React, { CSSProperties } from 'react';
+import { Modal, ModalProps, MantineTheme } from '@mantine/core';
 
 /**
  * 统一的 Modal 基础组件，封装项目中所有 Modal 共用的极光主题样式。
@@ -13,12 +13,15 @@ import { Modal, ModalProps } from '@mantine/core';
 
 export type ModalVariant = 'aurora' | 'solid';
 
+type ModalStylesObject = Partial<Record<string, CSSProperties | Record<string, any>>>;
+type ModalStylesInput = ModalStylesObject | ((theme: MantineTheme) => ModalStylesObject);
+
 interface BaseModalProps extends Omit<ModalProps, 'styles'> {
   variant?: ModalVariant;
-  styles?: ModalProps['styles'];
+  styles?: ModalStylesInput;
 }
 
-const variantStyles: Record<ModalVariant, ModalProps['styles']> = {
+const variantStyles: Record<ModalVariant, ModalStylesObject> = {
   aurora: {
     content: {
       background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.98) 0%, rgba(30, 30, 30, 0.98) 100%)',
@@ -69,6 +72,16 @@ const variantStyles: Record<ModalVariant, ModalProps['styles']> = {
   }
 };
 
+const resolveStyles = (
+  input: ModalStylesInput | undefined,
+  theme: MantineTheme
+): ModalStylesObject => {
+  if (!input) {
+    return {};
+  }
+  return typeof input === 'function' ? input(theme) : input;
+};
+
 const BaseModal: React.FC<BaseModalProps> = ({
   variant = 'aurora',
   styles,
@@ -78,20 +91,20 @@ const BaseModal: React.FC<BaseModalProps> = ({
   // 合并预设样式和自定义样式
   const baseStyles = variantStyles[variant];
   const mergedStyles: ModalProps['styles'] = styles
-    ? (theme) => {
-        const base = typeof baseStyles === 'function' ? baseStyles(theme) : baseStyles;
-        const custom = typeof styles === 'function' ? styles(theme) : styles;
+    ? ((theme: MantineTheme) => {
+        const base = resolveStyles(baseStyles, theme);
+        const custom = resolveStyles(styles, theme);
         return {
           ...base,
           ...custom,
-          content: { ...(base as any)?.content, ...(custom as any)?.content },
-          header: { ...(base as any)?.header, ...(custom as any)?.header },
-          title: { ...(base as any)?.title, ...(custom as any)?.title },
-          body: { ...(base as any)?.body, ...(custom as any)?.body },
-          close: { ...(base as any)?.close, ...(custom as any)?.close },
+          content: { ...base.content, ...custom.content },
+          header: { ...base.header, ...custom.header },
+          title: { ...base.title, ...custom.title },
+          body: { ...base.body, ...custom.body },
+          close: { ...base.close, ...custom.close },
         };
-      }
-    : baseStyles;
+      }) as ModalProps['styles']
+    : (baseStyles as ModalProps['styles']);
 
   return (
     <Modal styles={mergedStyles} {...rest}>

@@ -1,6 +1,8 @@
 // 证物管理工具函数
 
 import { Evidence, EvidenceContext, EvidenceFilter, EvidenceStats, EvidenceDiscovery, EvidencePresentation, GameProgress } from '../types/evidence';
+import { Script, ScriptEvidence } from '../types/script';
+import { initializeEvidencesForScript } from '../data/sampleEvidences';
 import { nanoid } from 'nanoid';
 
 // 动态查找角色头像文件名的函数
@@ -661,9 +663,6 @@ export const buildEvidenceTooltip = (evidence: Evidence): string => {
 };
 
 // ==================== 证物初始化函数 ====================
-
-import { Script, ScriptEvidence } from '../types/script';
-import { initializeEvidencesForScript } from '../data/sampleEvidences';
 
 /**
  * 分离证物概况和线索的工具函数

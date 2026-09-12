@@ -41,7 +41,7 @@ export default function Home() {
   const [, setLoading] = useState(false);
   const [forcedMessageSent, setForcedMessageSent] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<string[]>([]);
-  const [cancelStream, setCancelStream] = useState<(() => void) | null>(null);
+  const [, setCancelStream] = useState<(() => void) | null>(null);
   const sessionId = useSessionContext();
 
   // 初始化证物数据

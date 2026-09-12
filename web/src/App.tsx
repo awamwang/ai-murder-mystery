@@ -1,7 +1,6 @@
 import React from "react";
 import { MantineProvider, createTheme } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
 import ScriptEditor from "./pages/ScriptEditor";
 import ScriptLibrary from "./pages/ScriptLibrary";
 import PlayScript from "./pages/PlayScript";

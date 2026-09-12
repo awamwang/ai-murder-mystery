@@ -220,7 +220,7 @@ const deleteScriptFromFileSystem = async (fileName: string): Promise<boolean> =>
 export const saveScriptToFile = async (script: Script): Promise<boolean> => {
   try {
     const scriptData = { ...script, savedAt: new Date().toISOString(), version: script.version || '1.0.0' };
-    const fileSystemSaved = await saveScriptToFileSystem(script);
+    await saveScriptToFileSystem(script);
     const scriptsIndex = JSON.parse(localStorage.getItem('scripts_index') || '[]');
     const existingIndex = scriptsIndex.findIndex((item: any) => item.id === script.id);
     const fileName = await getScriptFileName(script);

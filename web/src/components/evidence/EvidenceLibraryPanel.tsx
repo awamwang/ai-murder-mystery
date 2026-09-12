@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   TextInput,
   Select,
@@ -58,7 +58,7 @@ const EvidenceLibraryPanel: React.FC<EvidenceLibraryPanelProps> = ({
   const [victimAvatarFilename, setVictimAvatarFilename] = useState<string | null>(null);
 
   // 获取受害人角色信息
-  const getVictimCharacter = () => {
+  const getVictimCharacter = useCallback(() => {
     if (!currentScript?.characters) {
       console.log('🔍 getVictimCharacter - 当前脚本或角色列表为空');
       return null;
@@ -85,7 +85,7 @@ const EvidenceLibraryPanel: React.FC<EvidenceLibraryPanelProps> = ({
     }
     
     return victim;
-  };
+  }, [currentScript]);
 
   // 动态查找角色头像文件名的异步函数
   const findCharacterAvatarFilename = async (characterName: string): Promise<string | null> => {
@@ -227,10 +227,10 @@ const EvidenceLibraryPanel: React.FC<EvidenceLibraryPanelProps> = ({
     };
     
     loadVictimAvatarFilename();
-  }, [currentScript]);
+  }, [currentScript, getVictimCharacter, sessionId]);
 
   // 加载证物数据
-  const loadEvidences = () => {
+  const loadEvidences = useCallback(() => {
     try {
       // 确保受害人证物被添加到证物库中
       const victimEvidence = getVictimAsEvidence();
@@ -243,7 +243,6 @@ const EvidenceLibraryPanel: React.FC<EvidenceLibraryPanelProps> = ({
         }
       }
       
-      const context = loadEvidenceContext(sessionId);
       const filteredEvidences = getFilteredEvidences(sessionId, {
         ...filter,
         searchQuery: searchQuery.trim() || undefined
@@ -257,7 +256,8 @@ const EvidenceLibraryPanel: React.FC<EvidenceLibraryPanelProps> = ({
     } catch (error) {
       console.error('❌ 加载证物失败:', error);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId, filter, searchQuery]);
 
   // 手动刷新证物数据
   const handleRefresh = async () => {
@@ -282,7 +282,7 @@ const EvidenceLibraryPanel: React.FC<EvidenceLibraryPanelProps> = ({
     }, searchQuery ? 300 : 0); // 搜索时延迟300ms，其他情况立即执行
 
     return () => clearTimeout(timeoutId);
-  }, [sessionId, filter, searchQuery, victimAvatarFilename]);
+  }, [sessionId, filter, searchQuery, victimAvatarFilename, loadEvidences]);
 
   // 清除过期的新标记
   useEffect(() => {
@@ -324,16 +324,6 @@ const EvidenceLibraryPanel: React.FC<EvidenceLibraryPanelProps> = ({
     setShowDetailModal(false);
   };
 
-
-  // 获取状态颜色
-  const getStateColor = (state: string) => {
-    switch (state) {
-      case 'analyzed': return 'green';
-      case 'investigated': return 'yellow';
-      case 'surface': return 'blue';
-      default: return 'gray';
-    }
-  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

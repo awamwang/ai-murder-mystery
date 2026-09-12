@@ -1,7 +1,5 @@
 // 共享的选择面板样式（EvidenceSelectorPanel 和 NoteSelectorPanel 共用）
 
-import { MantineStyleProp } from '@mantine/core';
-
 export const selectorModalStyles = {
   content: {
     backgroundColor: 'rgba(18, 18, 18, 0.95)',

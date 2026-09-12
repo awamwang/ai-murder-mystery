@@ -36,10 +36,8 @@ import {
 import { ScriptEvidence, createEvidenceTemplate, Script } from '../../types/script';
 import { 
   generateEvidenceImage, 
-  uploadEvidenceImage, 
   getEvidenceImageUrl,
   validateImageFile,
-  compressImage
 } from '../../api/evidenceImageGenerator';
 import { 
   getAllEvidenceIcons, 
@@ -254,7 +252,8 @@ const EvidenceManagementPanel: React.FC<EvidenceManagementPanelProps> = ({
       
       alert(`重新加载失败: ${error instanceof Error ? error.message : '未知错误'}`);
     }
-  }, [script.id, sessionId]); // 移除 onEvidencesChange 依赖避免无限循环
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [script.id, sessionId]);
 
   // 自动加载证物（当组件挂载或scriptId变化时）
   useEffect(() => {
@@ -292,7 +291,8 @@ const EvidenceManagementPanel: React.FC<EvidenceManagementPanelProps> = ({
     };
     
     loadEvidencesFromDB();
-  }, [script.id, evidences.length]); // 移除 handleReloadEvidences 依赖避免无限循环
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [script.id, evidences.length]);
 
   // 分离证物概况和线索的工具函数
   const separateEvidenceContent = (description: string): { overview: string; clues: string } => {
@@ -703,44 +703,6 @@ const EvidenceManagementPanel: React.FC<EvidenceManagementPanelProps> = ({
       alert('图像生成失败，请稍后重试');
     } finally {
       setIsGeneratingImage(false);
-    }
-  };
-
-  // 处理上传图像
-  const handleUploadImage = async (file: File, evidence: ScriptEvidence) => {
-    const validation = validateImageFile(file);
-    if (!validation.isValid) {
-      alert(validation.error);
-      return;
-    }
-
-    try {
-      // 压缩图像
-      const compressedFile = await compressImage(file);
-      
-      // 上传图像
-      const response = await uploadEvidenceImage(compressedFile, evidence.name);
-      
-      if (response.success && response.imageUrl) {
-        // 使用 imageUrl 而不是 imagePath，确保路径正确
-        const updatedEvidence = { ...evidence, image: response.imageUrl };
-        if (editingEvidence) {
-          setEditingEvidence(updatedEvidence);
-          // 清除可能的缓存状态
-          setImagePreview('');
-          setImageFile(null);
-        }
-        
-        // 刷新预设图像列表，让新上传的图像立即出现在预设库中
-        await refreshPresetImages();
-        
-        alert('图像上传成功！预设库已更新');
-      } else {
-        alert(`图像上传失败: ${response.error}`);
-      }
-    } catch (error) {
-      console.error('图像上传失败:', error);
-      alert('图像上传失败，请稍后重试');
     }
   };
 
