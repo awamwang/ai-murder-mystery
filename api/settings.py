@@ -52,3 +52,6 @@ OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 GROQ_API_BASE = os.getenv("GROQ_API_BASE", "https://api.groq.com/openai/v1")
 OPENROUTER_API_BASE = os.getenv("OPENROUTER_API_BASE", "https://openrouter.ai/api/v1")
 OPENAI_API_BASE = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
+
+# 图片生成模型（火山方舟 Agent Plan / Seedream）
+IMAGE_MODEL = os.getenv("IMAGE_MODEL", "doubao-seedream-5-0-lite-260128")

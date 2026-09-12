@@ -69,7 +69,7 @@ AI 剧本杀（AI Murder Mystery）是一个基于多智能体大语言模型的
 | 状态管理 | React Context + Constate |
 | 客户端存储 | IndexedDB (localforage) + localStorage |
 | AI 服务 | Anthropic / OpenAI / DeepSeek / Groq / Ollama / OpenRouter |
-| 图像生成 | 火山引擎 API |
+| 图像生成 | 火山方舟 Agent Plan（Seedream） |
 | 部署 | Docker + Docker Compose |
 
 ## 快速开始
@@ -117,9 +117,8 @@ MAX_TOKENS=8192
 # （可选）PostgreSQL 连接地址，不设置则使用 SQLite
 # DB_CONN_URL=postgresql://user:pass@host:5432/dbname
 
-# （可选）火山引擎，用于图像生成
-# VOLC_ACCESS_KEY=your-key
-# VOLC_SECRET_KEY=your-secret
+# 图片生成模型（火山方舟 Agent Plan / Seedream，复用上方 API_KEY 与 OPENAI_API_BASE）
+# IMAGE_MODEL=doubao-seedream-5-0-lite-260128
 ```
 
 
